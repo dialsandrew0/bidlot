@@ -23,7 +23,9 @@ jobs:
           deno-version: v2.x
 
       - name: Check Deno version
-        run: deno --version
+        run: |
+          which deno
+          deno --version
 
       - name: Run linter
         run: deno lint
