@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.decision-bid    { @apply bg-emerald-900 text-emerald-300 border border-emerald-700; }
+.decision-watch  { @apply bg-blue-900 text-blue-300 border border-blue-700; }
+.decision-maybe  { @apply bg-yellow-900 text-yellow-300 border border-yellow-700; }
+.decision-skip   { @apply bg-red-900 text-red-300 border border-red-700; }
