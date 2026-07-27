@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
 
-
+export const metadata: Metadata = {
+  title: 'bidlot – Auction Intelligence OS',
   description: 'Estate sale triage, max-bid scoring, and niche valuation for serious buyers.',
 };
 
