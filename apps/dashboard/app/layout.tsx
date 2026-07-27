@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 
-export const metadata: Metadata = {
-  title: 'bidlot — Auction Intelligence OS',
+
   description: 'Estate sale triage, max-bid scoring, and niche valuation for serious buyers.',
 };
 
@@ -19,6 +18,7 @@ export default function RootLayout({
           <a href="/" className="text-sm text-zinc-400 hover:text-white">Inbox</a>
           <a href="/radar" className="text-sm text-zinc-400 hover:text-white">Radar</a>
           <a href="/deep-dives" className="text-sm text-zinc-400 hover:text-white">Deep Dives</a>
+          <a href="/won-lost" className="text-sm text-zinc-400 hover:text-white">Won / Lost</a>
         </nav>
         <main className="max-w-6xl mx-auto px-4 py-8">{children}</main>
       </body>
