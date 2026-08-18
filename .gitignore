@@ -1,0 +1,17 @@
+
+# Local dashboard dependencies / generated files
+apps/dashboard/node_modules/
+apps/dashboard/package-lock.json
+apps/dashboard/tsconfig.tsbuildinfo
+EO
+cat >> .gitignore <<'EOF'
+
+# Local dashboard dependencies / generated files
+apps/dashboard/node_modules/
+apps/dashboard/package-lock.json
+apps/dashboard/tsconfig.tsbuildinfo
+
+# Local dashboard dependencies / generated files
+apps/dashboard/node_modules/
+apps/dashboard/package-lock.json
+apps/dashboard/tsconfig.tsbuildinfo
