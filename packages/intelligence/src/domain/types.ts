@@ -1,6 +1,11 @@
 export type Currency = "USD" | "EUR" | "GBP" | "CAD" | "AUD";
 
-export type Decision = "BUY" | "BID" | "PASS" | "RESEARCH";
+export type Decision =
+  | "BUY"
+  | "BID"
+  | "WATCH"
+  | "RESEARCH"
+  | "PASS";
 
 export type EvidenceKind =
   | "SOLD_COMP"
@@ -10,6 +15,15 @@ export type EvidenceKind =
   | "PROVENANCE"
   | "USER_INPUT"
   | "MODEL_INFERENCE";
+
+export type Condition =
+  | "NEW"
+  | "LIKE_NEW"
+  | "EXCELLENT"
+  | "GOOD"
+  | "FAIR"
+  | "POOR"
+  | "UNKNOWN";
 
 export interface Money {
   amount: number;
@@ -22,8 +36,16 @@ export interface Evidence {
   title: string;
   source?: string;
   observedAt?: string;
-  relevance: number; // 0..1
-  reliability: number; // 0..1
+
+  /** How directly this evidence supports the claim. */
+  relevance: number;
+
+  /** How trustworthy the source is. */
+  reliability: number;
+
+  /** Optional 0..1 freshness override. */
+  recency?: number;
+
   notes?: string;
 }
 
@@ -32,9 +54,19 @@ export interface ComparableSale {
   title: string;
   soldPrice: Money;
   soldAt: string;
-  condition?: string;
+
+  condition?: Condition;
   marketplace?: string;
-  similarity: number; // 0..1
+
+  /** 0..1 semantic/item similarity. */
+  similarity: number;
+
+  /** 0..1 condition similarity. */
+  conditionMatch?: number;
+
+  /** 0..1 model/variant similarity. */
+  variantMatch?: number;
+
   evidence: Evidence[];
 }
 
@@ -42,10 +74,16 @@ export interface Valuation {
   low: Money;
   midpoint: Money;
   high: Money;
-  confidence: number; // 0..1
+
+  confidence: number;
+  evidenceStrength: number;
+
   source: "EVIDENCE" | "FALLBACK";
+
   comparableCount: number;
-  evidenceQuality: number; // 0..1
+  effectiveComparableCount: number;
+  marketAgreement: number;
+
   assumptions: string[];
   risks: string[];
 }
@@ -53,28 +91,89 @@ export interface Valuation {
 export interface EconomicsInput {
   acquisitionCost: Money;
   valuation: Valuation;
-  sellingFeeRate: number; // 0..1
+
+  sellingFeeRate: number;
   fixedSellingFees: Money;
   shippingCost: Money;
   otherCosts: Money;
-  targetMarginRate: number; // 0..1
-  riskReserveRate: number; // 0..1
+
+  targetMarginRate: number;
+  riskReserveRate: number;
 }
 
 export interface Economics {
   expectedSalePrice: Money;
   expectedNetProfit: Money;
+
   roi: number;
+
   totalCost: Money;
+
   maxBuyPrice: Money;
   breakEvenPrice: Money;
+
+  requiredReturn: Money;
+  riskReserve: Money;
+}
+
+export interface AuctionInput {
+  currentBid: Money;
+
+  /** Buyer premium as decimal, e.g. .18 */
+  buyerPremiumRate: number;
+
+  buyerFixedFees: Money;
+
+  /** Typical next bid increment. */
+  bidIncrement: Money;
+
+  /** Additional uncertainty reserve applied to the ceiling. */
+  competitionReserveRate: number;
+}
+
+export interface AuctionAnalysis {
+  currentBid: Money;
+
+  nextBid: Money;
+
+  economicCeiling: Money;
+  recommendedMaxBid: Money;
+
+  headroom: Money;
+  headroomRate: number;
+
+  buyerPremium: Money;
+  totalAuctionCostAtMax: Money;
+
+  bidAllowed: boolean;
+
+  reasons: string[];
+  risks: string[];
+}
+
+export interface RiskAssessment {
+  score: number;
+  level: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+
+  expectedLossReserve: Money;
+
+  factors: Array<{
+    name: string;
+    score: number;
+    impact: number;
+    explanation: string;
+  }>;
 }
 
 export interface DecisionResult {
   decision: Decision;
-  score: number; // 0..100
-  economics: Economics;
+  score: number;
+
   valuation: Valuation;
+  economics: Economics;
+  auction?: AuctionAnalysis;
+  risk?: RiskAssessment;
+
   reasons: string[];
   risks: string[];
   verificationSteps: string[];
@@ -83,14 +182,49 @@ export interface DecisionResult {
 export interface DealInput {
   itemId: string;
   title: string;
+
   acquisitionCost: Money;
+
   comparables: ComparableSale[];
+
   fallbackValue?: Money;
+
   sellingFeeRate: number;
   fixedSellingFees: Money;
   shippingCost: Money;
   otherCosts: Money;
+
   targetMarginRate: number;
   riskReserveRate: number;
+
   evidence?: Evidence[];
+
+  auction?: AuctionInput;
+}
+
+export interface PredictionRecord {
+  id: string;
+  itemId: string;
+
+  predictedDecision: Decision;
+  predictedValue: Money;
+  predictedMaxBuy: Money;
+
+  confidence: number;
+
+  predictedAt: string;
+}
+
+export interface OutcomeRecord {
+  predictionId: string;
+
+  acquired: boolean;
+  acquisitionCost?: Money;
+
+  sold: boolean;
+  salePrice?: Money;
+
+  realizedProfit?: Money;
+
+  observedAt: string;
 }
