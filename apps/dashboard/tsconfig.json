@@ -13,9 +13,28 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "plugins": [{"name": "next"}],
-    "paths": {"@/*": ["./*"]}
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"],
+      "@andysd/intelligence-core": [
+        "../../packages/intelligence/src/index.ts"
+      ],
+      "@andysd/intelligence-core/*": [
+        "../../packages/intelligence/src/*"
+      ]
+    }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

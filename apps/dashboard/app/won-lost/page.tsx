@@ -202,6 +202,8 @@ export default function WonLostPage() {
             <div className={clsx('col-span-1 text-right font-mono font-bold',
               lot.netProfit !== undefined ? (lot.netProfit > 0 ? 'text-emerald-400' : 'text-red-400') : 'text-zinc-600'
             )}>
+              {lot.netProfit !== undefined ? `$${lot.netProfit.toLocaleString()}` : '—'}
+            </div>
 
             <div className={clsx('col-span-1 text-right font-semibold',
               lot.roi !== undefined ? (lot.roi > 0 ? 'text-emerald-400' : 'text-red-400') : 'text-zinc-600'

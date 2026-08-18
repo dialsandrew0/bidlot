@@ -1,80 +1,151 @@
-// bidlot — shared TypeScript types
-// Mirrors the Supabase schema in supabase/migrations/001_initial.sql
-
 export type Decision = 'bid' | 'watch' | 'maybe' | 'skip';
 export type OutcomeResult = 'won' | 'lost' | 'passed';
 
-// ---------------------------------------------------------------------------
-// Lot — a scored auction lot stored in the `lots` table
-// ---------------------------------------------------------------------------
-export interface Lot {
-  id: string;
-  lot_url: string;
-  source: string;
-  title: string;
-  category: string;
-  shipping_mode: string;
-  current_bid: number;
-  max_bid: number;
-  arv: number;
-  margin: number;
-  confidence: number;
-  decision: Decision;
-  location: string;
-  estate_type: string;
-  sale_date: string;
-  time_remaining: string;
-  image_url?: string | null;
-  imported_at: string;
-  updated_at: string;
-}
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[];
 
-// ---------------------------------------------------------------------------
-// Outcome — a resolved auction result stored in the `outcomes` table
-// ---------------------------------------------------------------------------
-export interface Outcome {
-  id: string;
-  lot_id?: string | null;
-  lot_url: string;
-  title: string;
-  category: string;
-  result: OutcomeResult;
-  final_bid?: number | null;
-  max_bid?: number | null;
-  arv?: number | null;
-  actual_sell_price?: number | null;
-  profit_loss?: number | null;
-  margin_actual?: number | null;
-  location: string;
-  notes?: string | null;
-  closed_at: string;
-  created_at: string;
-}
-
-// ---------------------------------------------------------------------------
-// Database — Supabase type stub (use `supabase gen types typescript` for full)
-// ---------------------------------------------------------------------------
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       lots: {
-        Row: Lot;
-        Insert: Omit<Lot, 'id' | 'imported_at' | 'updated_at'> & {
+        Row: {
+          id: string;
+          lot_url: string;
+          source: string;
+          title: string;
+          category: string;
+          shipping_mode: string;
+          current_bid: number;
+          max_bid: number;
+          arv: number;
+          margin: number;
+          confidence: number;
+          decision: Decision;
+          location: string;
+          estate_type: string;
+          sale_date: string;
+          time_remaining: string;
+          image_url: string | null;
+          imported_at: string;
+          updated_at: string;
+        };
+        Insert: {
           id?: string;
+          lot_url: string;
+          source?: string;
+          title: string;
+          category?: string;
+          shipping_mode?: string;
+          current_bid?: number;
+          max_bid?: number;
+          arv?: number;
+          margin?: number;
+          confidence?: number;
+          decision?: Decision;
+          location?: string;
+          estate_type?: string;
+          sale_date?: string;
+          time_remaining?: string;
+          image_url?: string | null;
           imported_at?: string;
           updated_at?: string;
         };
-        Update: Partial<Omit<Lot, 'id'>>;
-      };
-      outcomes: {
-        Row: Outcome;
-        Insert: Omit<Outcome, 'id' | 'created_at'> & {
+        Update: {
           id?: string;
+          lot_url?: string;
+          source?: string;
+          title?: string;
+          category?: string;
+          shipping_mode?: string;
+          current_bid?: number;
+          max_bid?: number;
+          arv?: number;
+          margin?: number;
+          confidence?: number;
+          decision?: Decision;
+          location?: string;
+          estate_type?: string;
+          sale_date?: string;
+          time_remaining?: string;
+          image_url?: string | null;
+          imported_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+
+      outcomes: {
+        Row: {
+          id: string;
+          lot_id: string | null;
+          lot_url: string;
+          title: string;
+          category: string;
+          result: OutcomeResult;
+          final_bid: number | null;
+          max_bid: number | null;
+          arv: number | null;
+          actual_sell_price: number | null;
+          profit_loss: number | null;
+          margin_actual: number | null;
+          location: string;
+          notes: string | null;
+          closed_at: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          lot_id?: string | null;
+          lot_url: string;
+          title: string;
+          category?: string;
+          result: OutcomeResult;
+          final_bid?: number | null;
+          max_bid?: number | null;
+          arv?: number | null;
+          actual_sell_price?: number | null;
+          profit_loss?: number | null;
+          margin_actual?: number | null;
+          location?: string;
+          notes?: string | null;
+          closed_at?: string;
           created_at?: string;
         };
-        Update: Partial<Omit<Outcome, 'id'>>;
+        Update: {
+          id?: string;
+          lot_id?: string | null;
+          lot_url?: string;
+          title?: string;
+          category?: string;
+          result?: OutcomeResult;
+          final_bid?: number | null;
+          max_bid?: number | null;
+          arv?: number | null;
+          actual_sell_price?: number | null;
+          profit_loss?: number | null;
+          margin_actual?: number | null;
+          location?: string;
+          notes?: string | null;
+          closed_at?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'outcomes_lot_id_fkey';
+            columns: ['lot_id'];
+            isOneToOne: false;
+            referencedRelation: 'lots';
+            referencedColumns: ['id'];
+          }
+        ];
       };
     };
+
     Views: {
       pnl_by_category: {
         Row: {
@@ -85,9 +156,12 @@ export interface Database {
           total_profit: number;
           avg_margin: number;
         };
+        Relationships: [];
       };
     };
-    Functions: Record<string, never>;
-    Enums: Record<string, never>;
+
+    Functions: {};
+    Enums: {};
+    CompositeTypes: {};
   };
-}
+};
