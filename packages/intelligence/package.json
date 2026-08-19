@@ -1,15 +1,20 @@
 {
   "name": "@andysd/intelligence-core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
     "./domain": "./src/domain/types.ts",
+    "./evidence": "./src/evidence/quality.ts",
+    "./comparables": "./src/comparables/engine.ts",
     "./valuation": "./src/valuation/valuation.ts",
     "./economics": "./src/economics/economics.ts",
-    "./confidence": "./src/confidence/confidence.ts",
-    "./comparables": "./src/comparables/comparables.ts",
-    "./decision": "./src/decision/decision.ts"
+    "./auction": "./src/auction/max-bid.ts",
+    "./risk": "./src/risk/risk.ts",
+    "./decision": "./src/decision/decision.ts",
+    "./explanation": "./src/explanation/explanation.ts",
+    "./calibration": "./src/calibration/calibration.ts",
+    "./orchestrator": "./src/orchestrator.ts"
   }
 }
